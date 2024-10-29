@@ -1,0 +1,93 @@
+Traceback (most recent call last):
+  File "/home/administrador/.local/lib/python3.10/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+  File "/home/administrador/.local/lib/python3.10/site-packages/nbclient/client.py", line 1314, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/home/administrador/.local/lib/python3.10/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/administrador/.local/lib/python3.10/site-packages/nbclient/client.py", line 709, in async_execute
+    await self.async_execute_cell(
+  File "/home/administrador/.local/lib/python3.10/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/administrador/.local/lib/python3.10/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+
+def generar_pliegues_multivariados(data, tau, omega, train_size)
+    # Seleccionar columnas de volatilidad y retorno acumulado en función de omega y eliminar datos vacíos
+    vol_col = f'Volatilidad_{omega}'
+    data = data.dropna(subset=[vol_col, 'Retorno_Acumulado'])  # Eliminar filas con NaN en volatilidad o retorno acumulado
+    
+    n_samples = len(data)
+    pliegues = []
+    start = 0
+
+    # Iterar hasta que no haya suficiente espacio para un nuevo pliegue
+    while start + train_size + 2 * omega + tau - 1 < n_samples:
+        x_train_end = start + train_size
+        x_val_start = x_train_end
+        x_val_end = x_val_start + omega
+        x_test_start = x_val_end
+        x_test_end = x_test_start + omega
+
+        # Obtener conjuntos de entrenamiento, validación y prueba para X
+        X_train = [data[vol_col].iloc[i:i + omega].tolist() for i in range(start, x_train_end)]
+        X_val = [data[vol_col].iloc[i:i + omega].tolist() for i in range(x_val_start, x_val_end)]
+        X_test = [data[vol_col].iloc[i:i + omega].tolist() for i in range(x_test_start, x_test_end)]
+
+        # Verificar que todas las secuencias tengan la misma longitud
+        if not all(len(seq) == omega for seq in X_train + X_val + X_test):
+            start = x_test_end  # Avanzar al siguiente pliegue si hay inconsistencia
+            continue  # Ignorar este pliegue y pasar al siguiente
+        
+        # Normalización de X
+        scaler_x = MinMaxScaler()
+        X_train_scaled = scaler_x.fit_transform(X_train)
+        X_val_scaled = scaler_x.transform(X_val)
+        X_test_scaled = scaler_x.transform(X_test)
+
+        # Generar y solo si hay suficientes datos para completar tau
+        y_train = [data['Price'].iloc[i + omega:i + omega + tau].tolist() 
+                   for i in range(start, x_train_end) if i + omega + tau <= n_samples]
+        y_val = [data['Price'].iloc[i + omega:i + omega + tau].tolist() 
+                 for i in range(x_val_start, x_val_end) if i + omega + tau <= n_samples]
+        y_test = [data['Price'].iloc[i + omega:i + omega + tau].tolist() 
+                  for i in range(x_test_start, x_test_end) if i + omega + tau <= n_samples]
+        
+        # Normalización de y después del filtrado
+        scaler_y = MinMaxScaler()
+        y_train_scaled = scaler_y.fit_transform(np.array(y_train).reshape(-1, 1)).reshape(len(y_train), tau)
+        y_val_scaled = scaler_y.transform(np.array(y_val).reshape(-1, 1)).reshape(len(y_val), tau)
+        y_test_scaled = scaler_y.transform(np.array(y_test).reshape(-1, 1)).reshape(len(y_test), tau)
+
+        # Agregar el pliegue a la lista
+        pliegues.append({
+            "X_train": X_train_scaled,
+            "y_train": y_train_scaled,
+            "X_val": X_val_scaled,
+            "y_val": y_val_scaled,
+            "X_test": X_test_scaled,
+            "y_test": y_test_scaled,
+            "scaler_y": scaler_y  # Guardar el escalador para desescalar predicciones
+        })
+
+        # Avanzar al siguiente pliegue
+        start = x_test_end
+
+    return pliegues
+
+------------------
+
+
+[0;36m  Cell [0;32mIn[7], line 5[0;36m[0m
+[0;31m    def generar_pliegues_multivariados(data, tau, omega, train_size)[0m
+[0m                                                                    ^[0m
+[0;31mSyntaxError[0m[0;31m:[0m expected ':'
+
+

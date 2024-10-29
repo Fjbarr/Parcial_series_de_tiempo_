@@ -1,0 +1,1821 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Análisis Exploratorio de Datos (EDA) &#8212; Parcial practico</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'EDA';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Modelos de Deep Learning para Predicción de Series de Tiempo en Bitcoin" href="Modelos_de_Deep_Learning.html" />
+    <link rel="prev" title="Parcial practico" href="intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Parcial practico - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Parcial practico - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Parcial practico
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Análisis Exploratorio de Datos (EDA)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Modelos_de_Deep_Learning.html">Modelos de Deep Learning para Predicción de Series de Tiempo en Bitcoin</a></li>
+
+
+
+
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FEDA.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/EDA.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Análisis Exploratorio de Datos (EDA)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limpieza-y-preparacion-de-datos">Limpieza y Preparación de Datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculo-de-retornos-y-volatilidad">Cálculo de Retornos y Volatilidad</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacion-e-imputacion-de-datos-faltantes">Identificación e Imputación de Datos Faltantes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-del-histograma-volumen-de-transacciones-diarias-filtrado">Interpretación del Histograma - Volumen de Transacciones Diarias (Filtrado)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacion-de-series-de-tiempo-con-graficos-de-velas-y-distribucion-del-volumen">Visualización de Series de Tiempo con Gráficos de Velas y Distribución del Volumen</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grafico-de-velas-precio-de-bitcoin">Gráfico de Velas - Precio de Bitcoin</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grafico-de-velas-retorno-acumulado-diario">Gráfico de Velas - Retorno Acumulado Diario</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#graficos-de-velas-volatilidad-7-14-21-y-28-dias">Gráficos de Velas - Volatilidad (7, 14, 21, y 28 días)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-subseries">Análisis de Subseries</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-graficos-de-subseries-de-bitcoin">Interpretación de Gráficos de Subseries de Bitcoin</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-general-de-la-base-de-datos-de-bitcoin">Análisis General de la Base de Datos de Bitcoin</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tendencias-de-precio">1. Tendencias de Precio</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#comportamiento-del-retorno-acumulado">2. Comportamiento del Retorno Acumulado</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-volatilidad">3. Análisis de Volatilidad</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusiones-generales">Conclusiones Generales</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-estacionariedad-en-series-de-tiempo">Análisis de Estacionariedad en Series de Tiempo</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fase-1-analisis-inicial-de-estacionariedad">Fase 1: Análisis Inicial de Estacionariedad</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fase-2-transformacion-y-verificacion-de-estacionariedad">Fase 2: Transformación y Verificación de Estacionariedad</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-resultados-de-estacionariedad">Interpretación de Resultados de Estacionariedad</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-estacionariedad-para-la-serie-original-de-price">Análisis de Estacionariedad para la Serie Original de <code class="docutils literal notranslate"><span class="pre">Price</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-estacionariedad-para-retorno-acumulado">Análisis de Estacionariedad para <code class="docutils literal notranslate"><span class="pre">Retorno_Acumulado</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-estacionariedad-para-volatilidad-7">Análisis de Estacionariedad para <code class="docutils literal notranslate"><span class="pre">Volatilidad_7</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resumen-final">Resumen Final</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-estadistico-por-agrupacion-y-calculo-de-estadisticos-moviles">Análisis Estadístico por Agrupación y Cálculo de Estadísticos Móviles</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-general-de-las-distribuciones-de-frecuencias-por-lags-para-los-conjuntos-de-datos">Interpretación General de las Distribuciones de Frecuencias por Lags para los Conjuntos de Datos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#descomposicion-de-la-serie-temporal-y-verificacion-de-residuos">Descomposición de la Serie Temporal y Verificación de Residuos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-descomposicion-de-la-serie-temporal-y-prueba-de-independencia-en-residuos">Interpretación de la Descomposición de la Serie Temporal y Prueba de Independencia en Residuos</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-ljung-box-en-los-residuos">Prueba de Ljung-Box en los Residuos</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusión</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="analisis-exploratorio-de-datos-eda">
+<h1>Análisis Exploratorio de Datos (EDA)<a class="headerlink" href="#analisis-exploratorio-de-datos-eda" title="Link to this heading">#</a></h1>
+<p>(I) Se realiza un EDA exhaustivo sobre la serie de precios de Bitcoin, considerando:</p>
+<ul class="simple">
+<li><p>Identificación y manejo de datos faltantes.</p></li>
+<li><p>Visualización detallada usando gráficos de velas y histogramas de volumen con Plotly.</p></li>
+<li><p>Gráficos de subseries por semana, mes y año, incluyendo análisis de estacionariedad mediante ACF y pruebas estadísticas (Ljung-Box, Dickey-Fuller).</p></li>
+<li><p>Aplicación de medias móviles para remover tendencia y asegurar estacionariedad.</p></li>
+</ul>
+<p>(II) Replicación del EDA en series temporales de:</p>
+<ul class="simple">
+<li><p><strong>Retorno acumulado diario</strong>: Calculado como la suma de retornos diarios hasta el tiempo T.</p></li>
+<li><p><strong>Volatilidad</strong>: Determinada como la desviación estándar de los retornos diarios, evaluada en ventanas de ω = 7, 14, 21 y 28 días.</p></li>
+</ul>
+<p>Cada análisis incluye pruebas estadísticas y transformaciones para asegurar la independencia de los residuos y la adecuación de los modelos predictivos.</p>
+<section id="limpieza-y-preparacion-de-datos">
+<h2>Limpieza y Preparación de Datos<a class="headerlink" href="#limpieza-y-preparacion-de-datos" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Se importa el archivo CSV que contiene los datos históricos de Bitcoin en un DataFrame de pandas para su análisis.</p></li>
+<li><p>Las columnas se convierten al tipo numérico, permitiendo análisis cuantitativo sin errores de conversión.</p></li>
+<li><p>La columna <code class="docutils literal notranslate"><span class="pre">Date</span></code> se convierte a formato de fecha yse establece como índice en orden ascendente para otganizar la serie cronologicamente.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># Paso 1: Cargar el archivo CSV en el DataFrame</span>
+<span class="n">Historial_precios</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;Bitcoin_Historical_Data.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># Paso 2: Limpiar las columnas numéricas eliminando comas y caracteres no numéricos</span>
+<span class="n">num_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Price&#39;</span><span class="p">,</span> <span class="s1">&#39;Open&#39;</span><span class="p">,</span> <span class="s1">&#39;High&#39;</span><span class="p">,</span> <span class="s1">&#39;Low&#39;</span><span class="p">,</span> <span class="s1">&#39;Change %&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">num_cols</span><span class="p">:</span>
+    <span class="n">Historial_precios</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">Historial_precios</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s1">&#39;,&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;%&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">},</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">Historial_precios</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">Historial_precios</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>  <span class="c1"># Convertir a numérico</span>
+
+<span class="c1"># Paso 3: Convertir &#39;Date&#39; a datetime, establecer como índice y ordenar por fecha</span>
+<span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">])</span>
+<span class="n">Historial_precios</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;Date&#39;</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">Historial_precios</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Date&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Confirmar la limpieza y orden de los datos</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Datos después de la limpieza y orden:&quot;</span><span class="p">)</span>
+<span class="n">Historial_precios</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Datos después de la limpieza y orden:
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Price</th>
+      <th>Open</th>
+      <th>High</th>
+      <th>Low</th>
+      <th>Vol.</th>
+      <th>Change %</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2010-07-18</th>
+      <td>0.1</td>
+      <td>0.0</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.08K</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>2010-07-19</th>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.57K</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>2010-07-20</th>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.26K</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>2010-07-21</th>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.58K</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>2010-07-22</th>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>2.16K</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2024-03-20</th>
+      <td>67854.0</td>
+      <td>62046.8</td>
+      <td>68029.5</td>
+      <td>60850.9</td>
+      <td>133.53K</td>
+      <td>9.35</td>
+    </tr>
+    <tr>
+      <th>2024-03-21</th>
+      <td>65503.8</td>
+      <td>67860.0</td>
+      <td>68161.7</td>
+      <td>64616.1</td>
+      <td>75.26K</td>
+      <td>-3.46</td>
+    </tr>
+    <tr>
+      <th>2024-03-22</th>
+      <td>63785.5</td>
+      <td>65501.5</td>
+      <td>66633.3</td>
+      <td>62328.3</td>
+      <td>72.43K</td>
+      <td>-2.62</td>
+    </tr>
+    <tr>
+      <th>2024-03-23</th>
+      <td>64037.8</td>
+      <td>63785.6</td>
+      <td>65972.4</td>
+      <td>63074.9</td>
+      <td>35.11K</td>
+      <td>0.40</td>
+    </tr>
+    <tr>
+      <th>2024-03-24</th>
+      <td>67211.9</td>
+      <td>64036.5</td>
+      <td>67587.8</td>
+      <td>63812.9</td>
+      <td>65.59K</td>
+      <td>4.96</td>
+    </tr>
+  </tbody>
+</table>
+<p>4999 rows × 6 columns</p>
+</div></div></div>
+</div>
+</section>
+<section id="calculo-de-retornos-y-volatilidad">
+<h2>Cálculo de Retornos y Volatilidad<a class="headerlink" href="#calculo-de-retornos-y-volatilidad" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Se calcula el retorno diario y se agrega como una nueva columna <code class="docutils literal notranslate"><span class="pre">Retorno_Diario</span></code>.</p></li>
+<li><p>El retorno acumulado  se obtiene sumando los retornos diarios a lo largo del tiempo, mostrando la acumulación de ganancias o pérdidas en la columna <code class="docutils literal notranslate"><span class="pre">Retorno_Acumulado</span></code>.</p></li>
+<li><p>La volatilidad se calcula <strong>(desviación estándar de los retornos diarios)</strong> para ventanas móviles de 7, 14, 21 y 28 días. Cada ventana se agrega al DataFrame (<code class="docutils literal notranslate"><span class="pre">Volatilidad_7</span></code>, <code class="docutils literal notranslate"><span class="pre">Volatilidad_14</span></code>, etc.)</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Paso 5: Calcular el retorno diario y agregarlo como una columna &#39;Retorno_Diario&#39;</span>
+<span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Retorno_Diario&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span>
+
+<span class="c1"># Paso 6: Calcular el retorno acumulado y agregarlo como &#39;Retorno_Acumulado&#39;</span>
+<span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Retorno_Acumulado&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Retorno_Diario&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
+
+<span class="c1"># Paso 7: Calcular la volatilidad para cada ventana y agregarla al DataFrame</span>
+<span class="n">ventanas</span> <span class="o">=</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">28</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">ventana</span> <span class="ow">in</span> <span class="n">ventanas</span><span class="p">:</span>
+    <span class="n">Historial_precios</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Volatilidad_</span><span class="si">{</span><span class="n">ventana</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Retorno_Diario&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">ventana</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+
+<span class="c1"># Confirmar el cálculo de retornos y volatilidad</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Datos después del cálculo de retornos y volatilidad:&quot;</span><span class="p">)</span>
+<span class="n">Historial_precios</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Datos después del cálculo de retornos y volatilidad:
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Price</th>
+      <th>Open</th>
+      <th>High</th>
+      <th>Low</th>
+      <th>Vol.</th>
+      <th>Change %</th>
+      <th>Retorno_Diario</th>
+      <th>Retorno_Acumulado</th>
+      <th>Volatilidad_7</th>
+      <th>Volatilidad_14</th>
+      <th>Volatilidad_21</th>
+      <th>Volatilidad_28</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2010-07-18</th>
+      <td>0.1</td>
+      <td>0.0</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.08K</td>
+      <td>0.00</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2010-07-19</th>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.57K</td>
+      <td>0.00</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2010-07-20</th>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.26K</td>
+      <td>0.00</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2010-07-21</th>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.58K</td>
+      <td>0.00</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2010-07-22</th>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>0.1</td>
+      <td>2.16K</td>
+      <td>0.00</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2024-03-20</th>
+      <td>67854.0</td>
+      <td>62046.8</td>
+      <td>68029.5</td>
+      <td>60850.9</td>
+      <td>133.53K</td>
+      <td>9.35</td>
+      <td>0.093537</td>
+      <td>23.719802</td>
+      <td>0.060681</td>
+      <td>0.044544</td>
+      <td>0.044059</td>
+      <td>0.043374</td>
+    </tr>
+    <tr>
+      <th>2024-03-21</th>
+      <td>65503.8</td>
+      <td>67860.0</td>
+      <td>68161.7</td>
+      <td>64616.1</td>
+      <td>75.26K</td>
+      <td>-3.46</td>
+      <td>-0.034636</td>
+      <td>23.685166</td>
+      <td>0.061287</td>
+      <td>0.045543</td>
+      <td>0.044563</td>
+      <td>0.044045</td>
+    </tr>
+    <tr>
+      <th>2024-03-22</th>
+      <td>63785.5</td>
+      <td>65501.5</td>
+      <td>66633.3</td>
+      <td>62328.3</td>
+      <td>72.43K</td>
+      <td>-2.62</td>
+      <td>-0.026232</td>
+      <td>23.658934</td>
+      <td>0.061256</td>
+      <td>0.045630</td>
+      <td>0.044883</td>
+      <td>0.044397</td>
+    </tr>
+    <tr>
+      <th>2024-03-23</th>
+      <td>64037.8</td>
+      <td>63785.6</td>
+      <td>65972.4</td>
+      <td>63074.9</td>
+      <td>35.11K</td>
+      <td>0.40</td>
+      <td>0.003955</td>
+      <td>23.662889</td>
+      <td>0.057331</td>
+      <td>0.045643</td>
+      <td>0.044842</td>
+      <td>0.044385</td>
+    </tr>
+    <tr>
+      <th>2024-03-24</th>
+      <td>67211.9</td>
+      <td>64036.5</td>
+      <td>67587.8</td>
+      <td>63812.9</td>
+      <td>65.59K</td>
+      <td>4.96</td>
+      <td>0.049566</td>
+      <td>23.712455</td>
+      <td>0.057684</td>
+      <td>0.047754</td>
+      <td>0.045898</td>
+      <td>0.045030</td>
+    </tr>
+  </tbody>
+</table>
+<p>4999 rows × 12 columns</p>
+</div></div></div>
+</div>
+<section id="identificacion-e-imputacion-de-datos-faltantes">
+<h3>Identificación e Imputación de Datos Faltantes<a class="headerlink" href="#identificacion-e-imputacion-de-datos-faltantes" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Identificación de Datos Faltantes</strong>:</p>
+<ul class="simple">
+<li><p>Usamos <code class="docutils literal notranslate"><span class="pre">isna().sum()</span></code> en cada columna de los conjuntos (<code class="docutils literal notranslate"><span class="pre">Price</span></code>, <code class="docutils literal notranslate"><span class="pre">Retorno_Diario</span></code>, y <code class="docutils literal notranslate"><span class="pre">Volatilidad</span></code>) para contar los valores faltantes.</p></li>
+</ul>
+</li>
+<li><p><strong>Imputación de Datos Faltantes</strong>:</p>
+<ul class="simple">
+<li><p>Se aplicó una técnica de imputación basada en el <strong>Fill-foward</strong> (<code class="docutils literal notranslate"><span class="pre">fillna(method='ffill')</span></code> y <code class="docutils literal notranslate"><span class="pre">fillna(method='bfill')</span></code>). Este método reemplaza los valores faltantes en secuencia con el último valor válido previo o siguiente,</p></li>
+</ul>
+</li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># Función para convertir valores en &#39;K&#39;, &#39;M&#39;, o &#39;B&#39; a su valor numérico</span>
+<span class="k">def</span> <span class="nf">ajustar_formato</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="c1"># Remover comas y letras &quot;K&quot;, &quot;M&quot;, o &quot;B&quot;</span>
+        <span class="n">numeric_part</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;M&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="c1"># Convertir la parte numérica a float</span>
+        <span class="n">numeric_value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">numeric_part</span><span class="p">)</span>
+        <span class="c1"># Multiplicar según la notación</span>
+        <span class="k">if</span> <span class="s2">&quot;K&quot;</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">numeric_value</span> <span class="o">*</span> <span class="mi">1_000</span>
+        <span class="k">elif</span> <span class="s2">&quot;M&quot;</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">numeric_value</span> <span class="o">*</span> <span class="mi">1_000_000</span>
+        <span class="k">elif</span> <span class="s2">&quot;B&quot;</span> <span class="ow">in</span> <span class="n">val</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">numeric_value</span> <span class="o">*</span> <span class="mi">1_000_000_000</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">numeric_value</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+
+<span class="c1"># Paso 1: Cargar los datos desde el archivo CSV</span>
+<span class="c1"># Historial_precios = pd.read_csv(&#39;Bitcoin_Historical_Data.csv&#39;)</span>
+
+<span class="c1"># Convertir la columna &#39;Vol.&#39; al formato numérico usando la función ajustada</span>
+<span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Vol.&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Vol.&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">ajustar_formato</span><span class="p">)</span>
+
+<span class="c1"># Confirmación de los primeros valores para verificar la conversión</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Primeros valores de &#39;Vol.&#39; después del ajuste:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Vol.&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+
+<span class="c1"># Enfoque 2: Filtrar valores extremos para mejorar la visualización</span>
+<span class="c1"># Definir un umbral para filtrar valores extremos (por ejemplo, el percentil 95)</span>
+<span class="n">umbral</span> <span class="o">=</span> <span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Vol.&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="mf">0.95</span><span class="p">)</span>
+
+<span class="c1"># Filtrar los datos para el histograma</span>
+<span class="n">volumen_filtrado</span> <span class="o">=</span> <span class="n">Historial_precios</span><span class="p">[</span><span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Vol.&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">umbral</span><span class="p">][</span><span class="s1">&#39;Vol.&#39;</span><span class="p">]</span>
+
+<span class="c1"># Graficar el histograma del volumen filtrado</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">volumen_filtrado</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;skyblue&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Histograma - Volumen de Transacciones Diarias (Filtrado)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Volumen Diario (ajustado)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Frecuencia&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Primeros valores de &#39;Vol.&#39; después del ajuste:
+Date
+2010-07-18      80.0
+2010-07-19     570.0
+2010-07-20     260.0
+2010-07-21     580.0
+2010-07-22    2160.0
+Name: Vol., dtype: float64
+</pre></div>
+</div>
+<img alt="_images/75290afebbbb7efaa3209fa1640bc90c0ab6c726174395022611bc18790801d4.png" src="_images/75290afebbbb7efaa3209fa1640bc90c0ab6c726174395022611bc18790801d4.png" />
+</div>
+</div>
+</section>
+<section id="interpretacion-del-histograma-volumen-de-transacciones-diarias-filtrado">
+<h3>Interpretación del Histograma - Volumen de Transacciones Diarias (Filtrado)<a class="headerlink" href="#interpretacion-del-histograma-volumen-de-transacciones-diarias-filtrado" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Distribución Sesgada a la Izquierda</strong>: La mayor parte del volumen de transacciones está concentrada en valores bajos, observándose una alta frecuencia en los primeros intervalos que disminuye rápidamente a medida que aumentan los valores de volumen. Esto refleja una fuerte asimetría en la actividad transaccional diaria, indicando que las transacciones más pequeñas son las más comunes.</p></li>
+<li><p><strong>Baja Frecuencia en Volúmenes Altos</strong>: A partir de aproximadamente 0.2 millones, la frecuencia de transacciones disminuye de forma notable, lo cual sugiere que los volúmenes altos de transacción son menos frecuentes en el conjunto de datos. Esto podría reflejar actividades esporádicas o transacciones atípicas con un volumen inusualmente elevado.</p></li>
+<li><p><strong>Patrón de Actividad Habitual</strong>: El gráfico indica que la mayoría de las transacciones diarias son de volúmenes relativamente pequeños, mientras que los volúmenes mayores ocurren de forma menos frecuente. Esta tendencia puede ser indicativa de una actividad transaccional consistente, en donde los eventos de volumen alto son excepcionales.</p></li>
+</ol>
+<p>La imputación completó los valores faltantes en todas las columnas nesesarias para el ejericio,pero <strong>Vol.</strong> (Volumen), al tener  4,999 parece  ser irreparable o peude etar mal codificada.</p>
+</section>
+<section id="visualizacion-de-series-de-tiempo-con-graficos-de-velas-y-distribucion-del-volumen">
+<h3>Visualización de Series de Tiempo con Gráficos de Velas y Distribución del Volumen<a class="headerlink" href="#visualizacion-de-series-de-tiempo-con-graficos-de-velas-y-distribucion-del-volumen" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Gráficos de Velas para Precio, Volatilidad y Retorno Acumulado Diario</strong>: Para cada serie temporal (Precio, Volatilidad y Retorno Acumulado Diario), se generaron gráficos de velas utilizando la librería Plotly. Estos gráficos ayudan a observar los patrones diarios en términos de apertura, cierre, máximos y mínimos. La volatilidad se calculó para ventanas de 7, 14, 21 y 28 días,.</p></li>
+<li><p><strong>Histograma del Volumen Diario de Transacciones</strong>: La columna <em>Vol.</em> se transformó a formato numérico para representar correctamente las cantidades con notaciones como <em>K</em> y <em>M</em>. Posteriormente, se utilizó un histograma para visualizar la distribución de este volumen, lo que permite identificar picos y patrones de trading en días de alta y baja actividad,</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+
+
+<span class="c1"># Gráfico de velas para la columna &#39;Price&#39;</span>
+<span class="n">fig_price</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">go</span><span class="o">.</span><span class="n">Candlestick</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">Historial_precios</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+    <span class="nb">open</span><span class="o">=</span><span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Open&#39;</span><span class="p">],</span>
+    <span class="n">high</span><span class="o">=</span><span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;High&#39;</span><span class="p">],</span>
+    <span class="n">low</span><span class="o">=</span><span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Low&#39;</span><span class="p">],</span>
+    <span class="n">close</span><span class="o">=</span><span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Price&#39;</span><span class="p">]</span>
+<span class="p">)])</span>
+<span class="n">fig_price</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Gráfico de Velas - Precio de Bitcoin&#39;</span><span class="p">,</span>
+    <span class="n">xaxis_title</span><span class="o">=</span><span class="s1">&#39;Fecha&#39;</span><span class="p">,</span>
+    <span class="n">yaxis_title</span><span class="o">=</span><span class="s1">&#39;Precio (USD)&#39;</span><span class="p">,</span>
+    <span class="n">yaxis_tickformat</span><span class="o">=</span><span class="s2">&quot;.2f&quot;</span>
+<span class="p">)</span>
+<span class="n">fig_price</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Gráficos de velas para Volatilidad con diferentes ventanas (aumentando grosor de líneas)</span>
+<span class="k">for</span> <span class="n">ventana</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">28</span><span class="p">]:</span>
+    <span class="n">fig_volatilidad</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">go</span><span class="o">.</span><span class="n">Candlestick</span><span class="p">(</span>
+        <span class="n">x</span><span class="o">=</span><span class="n">Historial_precios</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+        <span class="nb">open</span><span class="o">=</span><span class="n">Historial_precios</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Volatilidad_</span><span class="si">{</span><span class="n">ventana</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>
+        <span class="n">high</span><span class="o">=</span><span class="n">Historial_precios</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Volatilidad_</span><span class="si">{</span><span class="n">ventana</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>
+        <span class="n">low</span><span class="o">=</span><span class="n">Historial_precios</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Volatilidad_</span><span class="si">{</span><span class="n">ventana</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>
+        <span class="n">close</span><span class="o">=</span><span class="n">Historial_precios</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Volatilidad_</span><span class="si">{</span><span class="n">ventana</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">],</span>
+        <span class="n">increasing_line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>  <span class="c1"># Grosor de línea aumentado</span>
+        <span class="n">decreasing_line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="p">)])</span>
+    <span class="n">fig_volatilidad</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Gráfico de Velas - Volatilidad (</span><span class="si">{</span><span class="n">ventana</span><span class="si">}</span><span class="s1"> días)&#39;</span><span class="p">,</span>
+        <span class="n">xaxis_title</span><span class="o">=</span><span class="s1">&#39;Fecha&#39;</span><span class="p">,</span>
+        <span class="n">yaxis_title</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Volatilidad </span><span class="si">{</span><span class="n">ventana</span><span class="si">}</span><span class="s1"> días&#39;</span><span class="p">,</span>
+        <span class="n">yaxis_tickformat</span><span class="o">=</span><span class="s2">&quot;.2f&quot;</span>
+    <span class="p">)</span>
+    <span class="n">fig_volatilidad</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Gráfico de velas para Retorno Acumulado Diario (aumentando grosor de líneas)</span>
+<span class="n">fig_retorno</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">go</span><span class="o">.</span><span class="n">Candlestick</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">Historial_precios</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+    <span class="nb">open</span><span class="o">=</span><span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Retorno_Acumulado&#39;</span><span class="p">],</span>
+    <span class="n">high</span><span class="o">=</span><span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Retorno_Acumulado&#39;</span><span class="p">],</span>
+    <span class="n">low</span><span class="o">=</span><span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Retorno_Acumulado&#39;</span><span class="p">],</span>
+    <span class="n">close</span><span class="o">=</span><span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Retorno_Acumulado&#39;</span><span class="p">],</span>
+    <span class="n">increasing_line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">3</span><span class="p">),</span>  <span class="c1"># Grosor de línea aumentado</span>
+    <span class="n">decreasing_line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="p">)])</span>
+<span class="n">fig_retorno</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Gráfico de Velas - Retorno Acumulado Diario&#39;</span><span class="p">,</span>
+    <span class="n">xaxis_title</span><span class="o">=</span><span class="s1">&#39;Fecha&#39;</span><span class="p">,</span>
+    <span class="n">yaxis_title</span><span class="o">=</span><span class="s1">&#39;Retorno Acumulado&#39;</span><span class="p">,</span>
+    <span class="n">yaxis_tickformat</span><span class="o">=</span><span class="s2">&quot;.2f&quot;</span>
+<span class="p">)</span>
+<span class="n">fig_retorno</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Histograma del Volumen diario ajustado</span>
+<span class="n">fig_volumen</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">Historial_precios</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Vol.&#39;</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Histograma - Volumen de Transacciones Diarias&#39;</span><span class="p">)</span>
+<span class="n">fig_volumen</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">xaxis_title</span><span class="o">=</span><span class="s1">&#39;Volumen Diario (ajustado)&#39;</span><span class="p">,</span> <span class="n">yaxis_title</span><span class="o">=</span><span class="s1">&#39;Frecuencia&#39;</span><span class="p">)</span>
+<span class="n">fig_volumen</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+</section>
+<section id="grafico-de-velas-precio-de-bitcoin">
+<h3>Gráfico de Velas - Precio de Bitcoin<a class="headerlink" href="#grafico-de-velas-precio-de-bitcoin" title="Link to this heading">#</a></h3>
+<p>Este gráfico muestra la evolución del precio de Bitcoin en el tiempo. Se observa una tendencia alcista significativa desde 2017, con picos notables en 2018 y un incremento aún mayor entre 2020 y 2021, alcanzando máximos históricos. La volatilidad es alta, especialmente en períodos de rápida subida o bajada de precio.</p>
+</section>
+<section id="grafico-de-velas-retorno-acumulado-diario">
+<h3>Gráfico de Velas - Retorno Acumulado Diario<a class="headerlink" href="#grafico-de-velas-retorno-acumulado-diario" title="Link to this heading">#</a></h3>
+<p>El gráfico de retorno acumulado diario muestra el crecimiento acumulativo del rendimiento de Bitcoin desde el inicio de los registros. A lo largo del tiempo, se observa una tendencia ascendente constante en el retorno acumulado, lo cual refleja la capacidad de Bitcoin para generar rendimientos significativos en el largo plazo. L</p>
+</section>
+<section id="graficos-de-velas-volatilidad-7-14-21-y-28-dias">
+<h3>Gráficos de Velas - Volatilidad (7, 14, 21, y 28 días)<a class="headerlink" href="#graficos-de-velas-volatilidad-7-14-21-y-28-dias" title="Link to this heading">#</a></h3>
+<p>Estos gráficos de volatilidad con diferentes ventanas muestran la variabilidad del precio de Bitcoin en el tiempo, calculada en ventanas móviles de 7, 14, 21 y 28 días. Se observa que la volatilidad fue especialmente alta en periodos de fuerte crecimiento o caída, como en 2017 y 2021, y disminuye en periodos de estabilidad relativa. Los valores más altos de volatilidad están concentrados en períodos de ajuste y corrección.</p>
+</section>
+</section>
+<section id="analisis-de-subseries">
+<h2>Análisis de Subseries<a class="headerlink" href="#analisis-de-subseries" title="Link to this heading">#</a></h2>
+<p>El análisis de subseries implica dividir la serie de tiempo en subconjuntos basados en una periodicidad específica, como semana, mes o año. Esta técnica permite:</p>
+<ul class="simple">
+<li><p><strong>Detectar estacionalidad</strong>: Visualizar patrones cíclicos que pueden ocurrir en intervalos específicos, como variaciones mensuales o anuales.</p></li>
+<li><p><strong>Evaluar variabilidad</strong>: Los boxplots ayudan a representar la dispersión de los datos, mostrando si la serie presenta cambios significativos en su variabilidad a lo largo del tiempo.</p></li>
+<li><p><strong>Comparar subseries</strong>: Agrupar por semanas, meses o años facilita el análisis de cómo se comporta la serie en diferentes marcos temporales.</p></li>
+</ul>
+<p>Realizaremos este análisis de subseries para las siguientes series:</p>
+<ol class="arabic simple">
+<li><p><strong>Precio de Bitcoin</strong>: Observando la evolución del precio en intervalos de semana, mes y año.</p></li>
+<li><p><strong>Retorno Acumulado Diario</strong>: Analizando los cambios acumulativos de rendimiento a lo largo del tiempo en distintos periodos.</p></li>
+<li><p><strong>Volatilidad</strong> (ventanas de 7, 14, 21 y 28 días): Examinando cómo fluctúa la volatilidad del mercado en función de diferentes periodos temporales.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+
+<span class="c1"># Asegurarse de que &#39;Date&#39; sea el índice de tipo datetime</span>
+<span class="k">if</span> <span class="s1">&#39;Date&#39;</span> <span class="ow">in</span> <span class="n">Historial_precios</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+    <span class="n">Historial_precios</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Date&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Verificar y limpiar datos numéricos en las columnas seleccionadas</span>
+<span class="n">cols_numericas</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Price&#39;</span><span class="p">,</span> <span class="s1">&#39;Retorno_Acumulado&#39;</span><span class="p">,</span> <span class="s1">&#39;Volatilidad_7&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols_numericas</span><span class="p">:</span>
+    <span class="n">Historial_precios</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">Historial_precios</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+<span class="n">Historial_precios</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;ffill&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Función para crear gráficos de series de tiempo y boxplots por frecuencia con zoom</span>
+<span class="k">def</span> <span class="nf">graficar_subseries</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columna</span><span class="p">,</span> <span class="n">frecuencias</span><span class="p">,</span> <span class="n">titulo_base</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">frecuencia</span><span class="p">,</span> <span class="n">nombre_frecuencia</span> <span class="ow">in</span> <span class="n">frecuencias</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="c1"># Agrupar y calcular la media en función de la frecuencia</span>
+        <span class="n">datos_agrupados</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">frecuencia</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+
+        <span class="c1"># Gráfico de serie de tiempo</span>
+        <span class="n">fig_tiempo</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="n">datos_agrupados</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">titulo_base</span><span class="si">}</span><span class="s2"> - Serie de Tiempo (</span><span class="si">{</span><span class="n">nombre_frecuencia</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="n">fig_tiempo</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Fecha&quot;</span><span class="p">,</span> <span class="n">yaxis_title</span><span class="o">=</span><span class="n">columna</span><span class="p">)</span>
+        <span class="n">fig_tiempo</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+        <span class="c1"># Crear boxplot agrupado por periodo</span>
+        <span class="n">datos_agrupados_df</span> <span class="o">=</span> <span class="n">datos_agrupados</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+        <span class="n">datos_agrupados_df</span><span class="p">[</span><span class="s1">&#39;Periodo&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datos_agrupados_df</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">to_period</span><span class="p">(</span><span class="n">nombre_frecuencia</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+        <span class="n">fig_boxplot</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="n">datos_agrupados_df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Periodo&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">columna</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">titulo_base</span><span class="si">}</span><span class="s2"> - Boxplot (</span><span class="si">{</span><span class="n">nombre_frecuencia</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Ajustar el rango del eje y para aplicar &quot;zoom&quot; en los valores principales</span>
+        <span class="n">fig_boxplot</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">rangemode</span><span class="o">=</span><span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="n">autorange</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">tickvals</span><span class="o">=</span><span class="n">datos_agrupados_df</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">quantile</span><span class="p">([</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">])</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+        
+        <span class="n">fig_boxplot</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Periodo&quot;</span><span class="p">,</span> <span class="n">yaxis_title</span><span class="o">=</span><span class="n">columna</span><span class="p">)</span>
+        <span class="n">fig_boxplot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Frecuencias a utilizar</span>
+<span class="n">frecuencias</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;W&#39;</span><span class="p">:</span> <span class="s1">&#39;Semanal&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">:</span> <span class="s1">&#39;Mensual&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">:</span> <span class="s1">&#39;Anual&#39;</span><span class="p">}</span>
+
+<span class="c1"># Graficar para cada conjunto solicitado con zoom en los boxplots</span>
+<span class="n">graficar_subseries</span><span class="p">(</span><span class="n">Historial_precios</span><span class="p">,</span> <span class="s1">&#39;Price&#39;</span><span class="p">,</span> <span class="n">frecuencias</span><span class="p">,</span> <span class="s1">&#39;Precio de Bitcoin&#39;</span><span class="p">)</span>
+<span class="n">graficar_subseries</span><span class="p">(</span><span class="n">Historial_precios</span><span class="p">,</span> <span class="s1">&#39;Retorno_Acumulado&#39;</span><span class="p">,</span> <span class="n">frecuencias</span><span class="p">,</span> <span class="s1">&#39;Retorno Acumulado Diario&#39;</span><span class="p">)</span>
+<span class="n">graficar_subseries</span><span class="p">(</span><span class="n">Historial_precios</span><span class="p">,</span> <span class="s1">&#39;Volatilidad_7&#39;</span><span class="p">,</span> <span class="n">frecuencias</span><span class="p">,</span> <span class="s1">&#39;Volatilidad (7 días)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_3999623/3860598986.py:13: FutureWarning:
+
+DataFrame.fillna with &#39;method&#39; is deprecated and will raise in a future version. Use obj.ffill() or obj.bfill() instead.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_3999623/3860598986.py:28: FutureWarning:
+
+&#39;S&#39; is deprecated and will be removed in a future version, please use &#39;s&#39; instead.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_3999623/3860598986.py:19: FutureWarning:
+
+&#39;M&#39; is deprecated and will be removed in a future version, please use &#39;ME&#39; instead.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_3999623/3860598986.py:19: FutureWarning:
+
+&#39;Y&#39; is deprecated and will be removed in a future version, please use &#39;YE&#39; instead.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_3999623/3860598986.py:28: FutureWarning:
+
+&#39;A&#39; is deprecated and will be removed in a future version, please use &#39;Y&#39; instead.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_3999623/3860598986.py:28: FutureWarning:
+
+&#39;S&#39; is deprecated and will be removed in a future version, please use &#39;s&#39; instead.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_3999623/3860598986.py:19: FutureWarning:
+
+&#39;M&#39; is deprecated and will be removed in a future version, please use &#39;ME&#39; instead.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_3999623/3860598986.py:19: FutureWarning:
+
+&#39;Y&#39; is deprecated and will be removed in a future version, please use &#39;YE&#39; instead.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_3999623/3860598986.py:28: FutureWarning:
+
+&#39;A&#39; is deprecated and will be removed in a future version, please use &#39;Y&#39; instead.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_3999623/3860598986.py:28: FutureWarning:
+
+&#39;S&#39; is deprecated and will be removed in a future version, please use &#39;s&#39; instead.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_3999623/3860598986.py:19: FutureWarning:
+
+&#39;M&#39; is deprecated and will be removed in a future version, please use &#39;ME&#39; instead.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_3999623/3860598986.py:19: FutureWarning:
+
+&#39;Y&#39; is deprecated and will be removed in a future version, please use &#39;YE&#39; instead.
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/tmp/ipykernel_3999623/3860598986.py:28: FutureWarning:
+
+&#39;A&#39; is deprecated and will be removed in a future version, please use &#39;Y&#39; instead.
+</pre></div>
+</div>
+</div>
+</div>
+<section id="interpretacion-de-graficos-de-subseries-de-bitcoin">
+<h3>Interpretación de Gráficos de Subseries de Bitcoin<a class="headerlink" href="#interpretacion-de-graficos-de-subseries-de-bitcoin" title="Link to this heading">#</a></h3>
+</section>
+<section id="analisis-general-de-la-base-de-datos-de-bitcoin">
+<h3>Análisis General de la Base de Datos de Bitcoin<a class="headerlink" href="#analisis-general-de-la-base-de-datos-de-bitcoin" title="Link to this heading">#</a></h3>
+<p>La base de datos de Bitcoin analizada presenta información detallada de su precio, retorno acumulado y volatilidad semanal a lo largo de varios años de esta podemos observar:</p>
+<section id="tendencias-de-precio">
+<h4>1. Tendencias de Precio<a class="headerlink" href="#tendencias-de-precio" title="Link to this heading">#</a></h4>
+<p>A lo largo de los años, el precio de Bitcoin ha experimentado un crecimiento significativo, especialmente a partir de 2017. Este aumento es particularmente evidente en los gráficos de serie de tiempo, donde se observan dos fases de crecimiento acelerado: una en 2017 y otra desde 2020 en adelante.</p>
+</section>
+<section id="comportamiento-del-retorno-acumulado">
+<h4>2. Comportamiento del Retorno Acumulado<a class="headerlink" href="#comportamiento-del-retorno-acumulado" title="Link to this heading">#</a></h4>
+<p>El retorno acumulado diario muestra un crecimiento estable, lo que sugiere que, a pesar de la volatilidad del precio, el rendimiento general de Bitcoin ha sido positivo. Desde una base baja, el retorno ha ido aumentando gradualmente, especialmente en períodos de alta adopción. Este comportamiento indica que los inversores a largo plazo han obtenido beneficios consistentes, a pesar de las caídas intermitentes en el precio.</p>
+</section>
+<section id="analisis-de-volatilidad">
+<h4>3. Análisis de Volatilidad<a class="headerlink" href="#analisis-de-volatilidad" title="Link to this heading">#</a></h4>
+<p>La volatilidad semanal del Bitcoin presenta picos en períodos de cambios de precios abruptos. Sin embargo, a lo largo del tiempo, se observa una tendencia a la estabilización, donde las fluctuaciones extremas se han reducido. Esto sugiere que el mercado ha alcanzado cierta madurez, con una menor sensibilidad a las variaciones abruptas en comparación con sus primeras etapas. La reducción de la volatilidad puede ser un indicador de la creciente confianza en Bitcoin como activo de inversión.</p>
+</section>
+</section>
+<section id="conclusiones-generales">
+<h3>Conclusiones Generales<a class="headerlink" href="#conclusiones-generales" title="Link to this heading">#</a></h3>
+<p>Los datos sugieren que Bitcoin ha evolucionado desde un activo extremadamente volátil y especulativo hacia uno más consolidado, aunque aún mantiene un grado de volatilidad considerable en comparación con activos tradicionales. La tendencia de crecimiento del precio y el retorno acumulado reflejan un interés sostenido por parte de inversores, mientras que la disminución de la volatilidad podría ser señal de un mercado más estable.</p>
+</section>
+<section id="analisis-de-estacionariedad-en-series-de-tiempo">
+<h3>Análisis de Estacionariedad en Series de Tiempo<a class="headerlink" href="#analisis-de-estacionariedad-en-series-de-tiempo" title="Link to this heading">#</a></h3>
+<p>Para analizar la estacionariedad de las series de tiempo <code class="docutils literal notranslate"><span class="pre">Price</span></code>, <code class="docutils literal notranslate"><span class="pre">Retorno_Acumulado</span></code> y <code class="docutils literal notranslate"><span class="pre">Volatilidad_7</span></code>, hemos dividido el proceso en dos fases:</p>
+<section id="fase-1-analisis-inicial-de-estacionariedad">
+<h4>Fase 1: Análisis Inicial de Estacionariedad<a class="headerlink" href="#fase-1-analisis-inicial-de-estacionariedad" title="Link to this heading">#</a></h4>
+<ol class="arabic simple">
+<li><p><strong>Gráfico de ACF</strong>: Este gráfico muestra la autocorrelación de la serie en diferentes rezagos. Un decrecimiento lento en la ACF sugiere una tendencia en la serie, lo que indicaría no estacionariedad.</p></li>
+<li><p><strong>Prueba de Ljung-Box</strong>: Esta prueba estadística verifica si existen correlaciones significativas en los rezagos. Un p-valor bajo (por ejemplo, &lt; 0.05) indica que la serie es no estacionaria.</p></li>
+<li><p><strong>Prueba de Dickey-Fuller (ADF)</strong>: Es una prueba de raíz unitaria que ayuda a confirmar si la serie es no estacionaria. Si el p-valor es alto (mayor a 0.05), la serie no es estacionaria.</p></li>
+</ol>
+</section>
+<section id="fase-2-transformacion-y-verificacion-de-estacionariedad">
+<h4>Fase 2: Transformación y Verificación de Estacionariedad<a class="headerlink" href="#fase-2-transformacion-y-verificacion-de-estacionariedad" title="Link to this heading">#</a></h4>
+<p>Si en la Fase 1 las pruebas indican que la serie no es estacionaria, aplicamos una <strong>diferenciación</strong>:</p>
+<ol class="arabic simple">
+<li><p><strong>Diferenciación</strong>: Transformamos la serie restando cada valor con su valor anterior, eliminando así la tendencia. Esto se conoce como diferenciación de primer orden.</p></li>
+<li><p><strong>Análisis de la Serie Transformada</strong>: Volvemos a generar el gráfico de ACF y repetimos las pruebas de Ljung-Box y Dickey-Fuller. Si estas pruebas ahora muestran un p-valor bajo, la serie diferenciada es estacionaria.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">statsmodels.tsa.stattools</span> <span class="kn">import</span> <span class="n">adfuller</span><span class="p">,</span> <span class="n">acf</span><span class="p">,</span> <span class="n">q_stat</span>
+<span class="kn">from</span> <span class="nn">statsmodels.graphics.tsaplots</span> <span class="kn">import</span> <span class="n">plot_acf</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="c1"># Evitar advertencias innecesarias</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+<span class="c1"># Función para verificar estacionariedad y aplicar transformación si es necesario</span>
+<span class="k">def</span> <span class="nf">analizar_estacionariedad</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columna</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="mi">40</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">### Análisis de Estacionariedad para </span><span class="si">{</span><span class="n">columna</span><span class="si">}</span><span class="s2"> ###</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Fase 1: Análisis Inicial</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;**Fase 1: Análisis Inicial de Estacionariedad**</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Gráfico de ACF de la serie original</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+    <span class="n">plot_acf</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span> <span class="n">lags</span><span class="o">=</span><span class="n">lags</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ACF para </span><span class="si">{</span><span class="n">columna</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="c1"># Prueba de Ljung-Box en la serie original</span>
+    <span class="n">lb_stat</span><span class="p">,</span> <span class="n">lb_pvalue</span> <span class="o">=</span> <span class="n">q_stat</span><span class="p">(</span><span class="n">acf</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span> <span class="n">nlags</span><span class="o">=</span><span class="n">lags</span><span class="p">,</span> <span class="n">fft</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Resultado de la prueba de Ljung-Box (serie original):&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estadístico: </span><span class="si">{</span><span class="n">lb_stat</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, p-valor: </span><span class="si">{</span><span class="n">lb_pvalue</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Prueba de Dickey-Fuller en la serie original</span>
+    <span class="n">adf_result</span> <span class="o">=</span> <span class="n">adfuller</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Resultado de la prueba de Dickey-Fuller (serie original):&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estadístico ADF: </span><span class="si">{</span><span class="n">adf_result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;p-valor: </span><span class="si">{</span><span class="n">adf_result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Valores críticos: </span><span class="si">{</span><span class="n">adf_result</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Fase 2: Transformación y Verificación</span>
+    <span class="k">if</span> <span class="n">adf_result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">0.05</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">**La serie no es estacionaria. Procediendo a la Fase 2: Transformación y Verificación**</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Diferenciar la serie</span>
+        <span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">columna</span><span class="si">}</span><span class="s1">_diff&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+        
+        <span class="c1"># Gráfico de ACF de la serie diferenciada</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+        <span class="n">plot_acf</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">columna</span><span class="si">}</span><span class="s1">_diff&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span> <span class="n">lags</span><span class="o">=</span><span class="n">lags</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ACF para </span><span class="si">{</span><span class="n">columna</span><span class="si">}</span><span class="s2"> Diferenciada&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+        <span class="c1"># Prueba de Ljung-Box en la serie diferenciada</span>
+        <span class="n">lb_stat_diff</span><span class="p">,</span> <span class="n">lb_pvalue_diff</span> <span class="o">=</span> <span class="n">q_stat</span><span class="p">(</span><span class="n">acf</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">columna</span><span class="si">}</span><span class="s1">_diff&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span> <span class="n">nlags</span><span class="o">=</span><span class="n">lags</span><span class="p">,</span> <span class="n">fft</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">columna</span><span class="si">}</span><span class="s1">_diff&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Resultado de la prueba de Ljung-Box (serie diferenciada):&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estadístico: </span><span class="si">{</span><span class="n">lb_stat_diff</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, p-valor: </span><span class="si">{</span><span class="n">lb_pvalue_diff</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Prueba de Dickey-Fuller en la serie diferenciada</span>
+        <span class="n">adf_result_diff</span> <span class="o">=</span> <span class="n">adfuller</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">columna</span><span class="si">}</span><span class="s1">_diff&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Resultado de la prueba de Dickey-Fuller (serie diferenciada):&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estadístico ADF: </span><span class="si">{</span><span class="n">adf_result_diff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;p-valor: </span><span class="si">{</span><span class="n">adf_result_diff</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Valores críticos: </span><span class="si">{</span><span class="n">adf_result_diff</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">adf_result_diff</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">0.05</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">**La serie diferenciada es estacionaria.**</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">**La serie diferenciada aún no es estacionaria.**</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;**La serie original es estacionaria.**</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Aplicar el análisis a los tres conjuntos de datos</span>
+<span class="n">conjuntos</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Price&#39;</span><span class="p">,</span> <span class="s1">&#39;Retorno_Acumulado&#39;</span><span class="p">,</span> <span class="s1">&#39;Volatilidad_7&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">conjunto</span> <span class="ow">in</span> <span class="n">conjuntos</span><span class="p">:</span>
+    <span class="n">analizar_estacionariedad</span><span class="p">(</span><span class="n">Historial_precios</span><span class="p">,</span> <span class="n">conjunto</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>### Análisis de Estacionariedad para Price ###
+
+**Fase 1: Análisis Inicial de Estacionariedad**
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 1000x500 with 0 Axes&gt;
+</pre></div>
+</div>
+<img alt="_images/3d5ca68333f080e9e1234fec74bed323e7d1d12533d9a403f30ff1c21f990bef.png" src="_images/3d5ca68333f080e9e1234fec74bed323e7d1d12533d9a403f30ff1c21f990bef.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Resultado de la prueba de Ljung-Box (serie original):
+Estadístico: 186935.7576, p-valor: 0.0000
+Resultado de la prueba de Dickey-Fuller (serie original):
+Estadístico ADF: -0.1731
+p-valor: 0.9417
+Valores críticos: {&#39;1%&#39;: np.float64(-3.431671756434938), &#39;5%&#39;: np.float64(-2.862124072118718), &#39;10%&#39;: np.float64(-2.567080902520151)}
+
+**La serie no es estacionaria. Procediendo a la Fase 2: Transformación y Verificación**
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 1000x500 with 0 Axes&gt;
+</pre></div>
+</div>
+<img alt="_images/0610f1ef7e143d950b9ce7d1e9af59c3bcdb4ee221a5f1b07bf086fbeb061671.png" src="_images/0610f1ef7e143d950b9ce7d1e9af59c3bcdb4ee221a5f1b07bf086fbeb061671.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Resultado de la prueba de Ljung-Box (serie diferenciada):
+Estadístico: 5262.4610, p-valor: 0.0000
+Resultado de la prueba de Dickey-Fuller (serie diferenciada):
+Estadístico ADF: -9.8319
+p-valor: 0.0000
+Valores críticos: {&#39;1%&#39;: np.float64(-3.4316720236491136), &#39;5%&#39;: np.float64(-2.862124190171984), &#39;10%&#39;: np.float64(-2.5670809653646014)}
+
+**La serie diferenciada es estacionaria.**
+
+
+### Análisis de Estacionariedad para Retorno_Acumulado ###
+
+**Fase 1: Análisis Inicial de Estacionariedad**
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 1000x500 with 0 Axes&gt;
+</pre></div>
+</div>
+<img alt="_images/55c9c538ffb83d4247baa3f39883b5fdd6a13bc599d749a4aa2a963a49f39808.png" src="_images/55c9c538ffb83d4247baa3f39883b5fdd6a13bc599d749a4aa2a963a49f39808.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Resultado de la prueba de Ljung-Box (serie original):
+Estadístico: 197442.8700, p-valor: 0.0000
+Resultado de la prueba de Dickey-Fuller (serie original):
+Estadístico ADF: -3.9089
+p-valor: 0.0020
+Valores críticos: {&#39;1%&#39;: np.float64(-3.431665640184842), &#39;5%&#39;: np.float64(-2.8621213700013244), &#39;10%&#39;: np.float64(-2.567079464076049)}
+**La serie original es estacionaria.**
+
+
+### Análisis de Estacionariedad para Volatilidad_7 ###
+
+**Fase 1: Análisis Inicial de Estacionariedad**
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;Figure size 1000x500 with 0 Axes&gt;
+</pre></div>
+</div>
+<img alt="_images/144bf31917ad9d60d944e437e5dfb7f5aaaf0ca68f60bf331f83f25ded1fa3e4.png" src="_images/144bf31917ad9d60d944e437e5dfb7f5aaaf0ca68f60bf331f83f25ded1fa3e4.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Resultado de la prueba de Ljung-Box (serie original):
+Estadístico: 25008.0199, p-valor: 0.0000
+Resultado de la prueba de Dickey-Fuller (serie original):
+Estadístico ADF: -8.5951
+p-valor: 0.0000
+Valores críticos: {&#39;1%&#39;: np.float64(-3.431671756434938), &#39;5%&#39;: np.float64(-2.862124072118718), &#39;10%&#39;: np.float64(-2.567080902520151)}
+**La serie original es estacionaria.**
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="interpretacion-de-resultados-de-estacionariedad">
+<h3>Interpretación de Resultados de Estacionariedad<a class="headerlink" href="#interpretacion-de-resultados-de-estacionariedad" title="Link to this heading">#</a></h3>
+<section id="analisis-de-estacionariedad-para-la-serie-original-de-price">
+<h4>Análisis de Estacionariedad para la Serie Original de <code class="docutils literal notranslate"><span class="pre">Price</span></code><a class="headerlink" href="#analisis-de-estacionariedad-para-la-serie-original-de-price" title="Link to this heading">#</a></h4>
+<ol class="arabic">
+<li><p><strong>ACF de la Serie Original</strong>: La función de autocorrelación muestra una alta correlación en todos los rezagos, indicando una fuerte dependencia temporal.</p></li>
+<li><p><strong>Pruebas de Estacionariedad</strong>:</p>
+<ul class="simple">
+<li><p><strong>Ljung-Box</strong>: El estadístico es muy alto y el p-valor es prácticamente cero, sugiriendo una correlación serial significativa y, por lo tanto, falta de independencia entre los rezagos.</p></li>
+<li><p><strong>Dickey-Fuller</strong>: El valor del estadístico ADF es mayor que los valores críticos, y el p-valor es elevado <strong>(0.9417)</strong>, indicando que no se rechaza la hipótesis nula de no estacionariedad.</p></li>
+</ul>
+<p><strong>Conclusión</strong>: La serie <code class="docutils literal notranslate"><span class="pre">Price</span></code> no es estacionaria en su forma original.</p>
+</li>
+</ol>
+</section>
+<section id="analisis-de-estacionariedad-para-retorno-acumulado">
+<h4>Análisis de Estacionariedad para <code class="docutils literal notranslate"><span class="pre">Retorno_Acumulado</span></code><a class="headerlink" href="#analisis-de-estacionariedad-para-retorno-acumulado" title="Link to this heading">#</a></h4>
+<ol class="arabic">
+<li><p><strong>ACF de la Serie Original</strong>: La serie muestra una alta autocorrelación en todos los rezagos.</p></li>
+<li><p><strong>Pruebas de Estacionariedad</strong>:</p>
+<ul class="simple">
+<li><p><strong>Ljung-Box</strong>: Estadístico muy alto y p-valor cero, indicando una correlación significativa.</p></li>
+<li><p><strong>Dickey-Fuller</strong>: El valor del estadístico ADF es menor que los valores críticos, y el p-valor es bajo (<strong>0.0020)</strong>, rechazando la hipótesis de no estacionariedad.</p></li>
+</ul>
+<p><strong>Conclusión</strong>: La serie <code class="docutils literal notranslate"><span class="pre">Retorno_Acumulado</span></code> es estacionaria en su forma original.</p>
+</li>
+</ol>
+</section>
+<section id="analisis-de-estacionariedad-para-volatilidad-7">
+<h4>Análisis de Estacionariedad para <code class="docutils literal notranslate"><span class="pre">Volatilidad_7</span></code><a class="headerlink" href="#analisis-de-estacionariedad-para-volatilidad-7" title="Link to this heading">#</a></h4>
+<ol class="arabic">
+<li><p><strong>ACF de la Serie Original</strong>: La autocorrelación disminuye gradualmente, indicando una dependencia temporal.</p></li>
+<li><p><strong>Pruebas de Estacionariedad</strong>:</p>
+<ul class="simple">
+<li><p><strong>Ljung-Box</strong>: Estadístico elevado y p-valor cero, sugiriendo correlación significativa.</p></li>
+<li><p><strong>Dickey-Fuller</strong>: El estadístico ADF es menor que los valores críticos, y el p-valor es prácticamente cero, rechazando la hipótesis de no estacionariedad.</p></li>
+</ul>
+<p><strong>Conclusión</strong>: La serie <code class="docutils literal notranslate"><span class="pre">Volatilidad_7</span></code> es estacionaria en su forma original.</p>
+</li>
+</ol>
+</section>
+</section>
+<section id="resumen-final">
+<h3>Resumen Final<a class="headerlink" href="#resumen-final" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">Price</span></code></strong>: No estacionaria en su forma original, requiere diferenciación.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">Retorno_Acumulado</span></code> y <code class="docutils literal notranslate"><span class="pre">Volatilidad_7</span></code></strong>: Ambas series son estacionarias en su forma original.</p></li>
+</ul>
+</section>
+<section id="analisis-estadistico-por-agrupacion-y-calculo-de-estadisticos-moviles">
+<h3>Análisis Estadístico por Agrupación y Cálculo de Estadísticos Móviles<a class="headerlink" href="#analisis-estadistico-por-agrupacion-y-calculo-de-estadisticos-moviles" title="Link to this heading">#</a></h3>
+<p>El objetivo es analizar el comportamiento de la media y la desviación estándar de la serie de tiempo agrupando los datos por días, semanas y meses. Además, se calculan estadísticos móviles sobre estas agrupaciones para obtener una visión dinámica del comportamiento de la serie en diferentes períodos. Finalmente, se genera una distribución de frecuencias para diferentes rezagos (<strong>lags</strong>) para observar la dispersión de los datos y su variabilidad temporal.</p>
+<p>A continuación, el código realiza los siguientes pasos:</p>
+<ol class="arabic simple">
+<li><p>Agrupación de los datos por días, semanas y meses.</p></li>
+<li><p>Cálculo de la media y desviación estándar para cada agrupación.</p></li>
+<li><p>Cálculo de estadísticas móviles (media y desviación estándar móviles).</p></li>
+<li><p>Visualización de la distribución de frecuencias para diferentes rezagos.</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Función para agrupar datos y calcular estadísticas</span>
+<span class="k">def</span> <span class="nf">calcular_agrupaciones</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columna</span><span class="p">,</span> <span class="n">frecuencia</span><span class="p">):</span>
+    <span class="n">agrupado</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">frecuencia</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">([</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span> <span class="s1">&#39;std&#39;</span><span class="p">])</span>
+    <span class="n">agrupado</span><span class="p">[</span><span class="s1">&#39;media_movil&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">agrupado</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">agrupado</span><span class="p">[</span><span class="s1">&#39;desv_movil&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">agrupado</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">agrupado</span>
+
+<span class="c1"># Lista de columnas y frecuencias a analizar</span>
+<span class="n">conjuntos</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Price&#39;</span><span class="p">,</span> <span class="s1">&#39;Retorno_Acumulado&#39;</span><span class="p">,</span> <span class="s1">&#39;Volatilidad_7&#39;</span><span class="p">]</span>
+<span class="n">frecuencias</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;D&#39;</span><span class="p">:</span> <span class="s1">&#39;Días&#39;</span><span class="p">,</span> <span class="s1">&#39;W&#39;</span><span class="p">:</span> <span class="s1">&#39;Semanas&#39;</span><span class="p">,</span> <span class="s1">&#39;M&#39;</span><span class="p">:</span> <span class="s1">&#39;Meses&#39;</span><span class="p">}</span>
+
+<span class="c1"># Calcular y graficar estadísticas para cada conjunto y frecuencia</span>
+<span class="k">for</span> <span class="n">conjunto</span> <span class="ow">in</span> <span class="n">conjuntos</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">freq_code</span><span class="p">,</span> <span class="n">freq_name</span> <span class="ow">in</span> <span class="n">frecuencias</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">agrupacion</span> <span class="o">=</span> <span class="n">calcular_agrupaciones</span><span class="p">(</span><span class="n">Historial_precios</span><span class="p">,</span> <span class="n">conjunto</span><span class="p">,</span> <span class="n">freq_code</span><span class="p">)</span>
+        
+        <span class="c1"># Graficar agrupaciones</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">agrupacion</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Media&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">agrupacion</span><span class="p">[</span><span class="s1">&#39;media_movil&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Media Móvil&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;orange&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">agrupacion</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">agrupacion</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">agrupacion</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">],</span> <span class="n">agrupacion</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">agrupacion</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">],</span> 
+                         <span class="n">color</span><span class="o">=</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Desv. Estándar&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Estadísticos para </span><span class="si">{</span><span class="n">conjunto</span><span class="si">}</span><span class="s1"> - </span><span class="si">{</span><span class="n">freq_name</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Fecha&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">conjunto</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Función para graficar la distribución de frecuencias para diferentes lags</span>
+<span class="k">def</span> <span class="nf">graficar_distribucion_frecuencia</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">columna</span><span class="p">,</span> <span class="n">lags</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">lag</span> <span class="ow">in</span> <span class="n">lags</span><span class="p">:</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">columna</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">lag</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">(),</span> <span class="n">bins</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;Lag </span><span class="si">{</span><span class="n">lag</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Distribución de Frecuencias para Diferentes Lags - </span><span class="si">{</span><span class="n">columna</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Diferencias&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Frecuencia&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># Dibujar distribuciones de frecuencias para lags de 1, 7 y 30 días para cada conjunto</span>
+<span class="n">lags</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">conjunto</span> <span class="ow">in</span> <span class="n">conjuntos</span><span class="p">:</span>
+    <span class="n">graficar_distribucion_frecuencia</span><span class="p">(</span><span class="n">Historial_precios</span><span class="p">,</span> <span class="n">conjunto</span><span class="p">,</span> <span class="n">lags</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/f67116cba438319a1a5ed90455d50e89b1fd9d3a994ae288acb95a2437f3e1a1.png" src="_images/f67116cba438319a1a5ed90455d50e89b1fd9d3a994ae288acb95a2437f3e1a1.png" />
+<img alt="_images/02330b404faaaf6c8c84ad5b50d97f719eeac1ab8d6d98cde943ba127dd628e7.png" src="_images/02330b404faaaf6c8c84ad5b50d97f719eeac1ab8d6d98cde943ba127dd628e7.png" />
+<img alt="_images/6246913170cee653081b71b6ddafa837c246a0281f02dce87ddb285d6481b7e6.png" src="_images/6246913170cee653081b71b6ddafa837c246a0281f02dce87ddb285d6481b7e6.png" />
+<img alt="_images/0e86c57c40a6cacb4fdd6e9172225f79eee54b68c323df28a94a353ddb03f3c7.png" src="_images/0e86c57c40a6cacb4fdd6e9172225f79eee54b68c323df28a94a353ddb03f3c7.png" />
+<img alt="_images/ebfbb98e73b999a0455ead8be1eba3702fee7df31943415f239a661cfd853d79.png" src="_images/ebfbb98e73b999a0455ead8be1eba3702fee7df31943415f239a661cfd853d79.png" />
+<img alt="_images/423fecbb9226e6d562afcbcf929a5c14be55d497c916392705abe1ce4839eeec.png" src="_images/423fecbb9226e6d562afcbcf929a5c14be55d497c916392705abe1ce4839eeec.png" />
+<img alt="_images/83b3d12db0a33ee7aafd834b4992fadc4b8d80f84196024b80c7313503fdad88.png" src="_images/83b3d12db0a33ee7aafd834b4992fadc4b8d80f84196024b80c7313503fdad88.png" />
+<img alt="_images/c1779615b7aed2e73c9c26337a70fc03f9c061aba79f0090ee09343cd2bcff0c.png" src="_images/c1779615b7aed2e73c9c26337a70fc03f9c061aba79f0090ee09343cd2bcff0c.png" />
+<img alt="_images/af6bdee30d8586bf5557547a14906124ffc7e28fde62e24d0ce825f965351315.png" src="_images/af6bdee30d8586bf5557547a14906124ffc7e28fde62e24d0ce825f965351315.png" />
+<img alt="_images/757348d3b743aec901603ce4d9143cef351a88cba9a0d1ccb3ebf7834fa51978.png" src="_images/757348d3b743aec901603ce4d9143cef351a88cba9a0d1ccb3ebf7834fa51978.png" />
+<img alt="_images/3b845f3d122ccffd0b3f36f91fb1a043f786152fbd7c8890a7d8c40782f5492f.png" src="_images/3b845f3d122ccffd0b3f36f91fb1a043f786152fbd7c8890a7d8c40782f5492f.png" />
+<img alt="_images/ea43bfe111a73ce8c0a4e336da0ac3cea6325339caefe2e0104a52d2ff669712.png" src="_images/ea43bfe111a73ce8c0a4e336da0ac3cea6325339caefe2e0104a52d2ff669712.png" />
+</div>
+</div>
+</section>
+<section id="interpretacion-general-de-las-distribuciones-de-frecuencias-por-lags-para-los-conjuntos-de-datos">
+<h3>Interpretación General de las Distribuciones de Frecuencias por Lags para los Conjuntos de Datos<a class="headerlink" href="#interpretacion-general-de-las-distribuciones-de-frecuencias-por-lags-para-los-conjuntos-de-datos" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Conjunto <code class="docutils literal notranslate"><span class="pre">Price</span></code></strong></p>
+<ul class="simple">
+<li><p>En los gráficos de distribución de diferencias para los lags 1, 7 y 30, se observa que la mayoría de las diferencias se concentran en torno a valores cercanos a cero. Esto indica que los cambios diarios en el precio son relativamente estables, y cualquier variación significativa tiende a revertirse rápidamente.</p></li>
+<li><p>Las distribuciones son simétricas con una dispersión creciente a medida que el lag aumenta, lo cual es característico en series de tiempo de precios donde los cambios están correlacionados en el corto plazo.</p></li>
+</ul>
+</li>
+<li><p><strong>Conjunto <code class="docutils literal notranslate"><span class="pre">Retorno_Acumulado</span></code></strong></p>
+<ul class="simple">
+<li><p>Las diferencias para los lags 1, 7 y 30 en el retorno acumulado también muestran una concentración cerca de cero, lo que sugiere que los cambios en el retorno acumulado diario son limitados.</p></li>
+<li><p>Este patrón indica una estabilidad acumulativa en los retornos diarios, con pocas variaciones bruscas en el tiempo. La forma de la distribución se mantiene similar en todos los lags, lo cual es indicativo de una tendencia de acumulación sin volatilidad significativa.</p></li>
+</ul>
+</li>
+<li><p><strong>Conjunto <code class="docutils literal notranslate"><span class="pre">Volatilidad_7</span></code></strong></p>
+<ul class="simple">
+<li><p>La volatilidad semanal (Volatilidad_7) muestra una distribución de diferencias muy estrecha y simétrica, cercana a cero en los tres lags. Esto refleja que la volatilidad es un factor que se mantiene constante en el tiempo, con pocas oscilaciones abruptas.</p></li>
+<li><p>La baja dispersión alrededor de cero en lags superiores confirma la estabilidad de la volatilidad semanal, con variaciones mínimas día a día.</p></li>
+</ul>
+</li>
+</ol>
+<ul class="simple">
+<li><p>La volatilidad semanal muestra un comportamiento altamente constante, con distribuciones muy concentradas alrededor de cero.</p></li>
+</ul>
+<p><strong>Conclusión:</strong> En general, los tres conjuntos de datos muestran un comportamiento estable, sin variaciones extremas en los cambios diarios, semanales o mensuales. Esto sugiere un alto grado de estacionariedad en las diferencias.</p>
+</section>
+<section id="descomposicion-de-la-serie-temporal-y-verificacion-de-residuos">
+<h3>Descomposición de la Serie Temporal y Verificación de Residuos<a class="headerlink" href="#descomposicion-de-la-serie-temporal-y-verificacion-de-residuos" title="Link to this heading">#</a></h3>
+<p>La descomposición de la serie temporal permite desglosar la serie original en tres componentes principales:</p>
+<ul class="simple">
+<li><p><strong>Tendencia</strong>: Muestra la dirección general de la serie a lo largo del tiempo.</p></li>
+<li><p><strong>Estacionalidad</strong>: Refleja patrones repetitivos a intervalos regulares.</p></li>
+<li><p><strong>Residuales</strong>: Son las variaciones no explicadas por la tendencia o estacionalidad.</p></li>
+</ul>
+<p>Usaremos <code class="docutils literal notranslate"><span class="pre">statsmodels.tsa.seasonal_decompose</span></code> para llevar a cabo esta descomposición.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># Paso 1: Cargar el archivo CSV en el DataFrame</span>
+<span class="n">Historial_precios</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;Bitcoin_Historical_Data.csv&quot;</span><span class="p">)</span>
+
+<span class="c1"># Paso 2: Limpiar las columnas numéricas eliminando comas y caracteres no numéricos</span>
+<span class="n">num_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Price&#39;</span><span class="p">,</span> <span class="s1">&#39;Open&#39;</span><span class="p">,</span> <span class="s1">&#39;High&#39;</span><span class="p">,</span> <span class="s1">&#39;Low&#39;</span><span class="p">,</span> <span class="s1">&#39;Change %&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">num_cols</span><span class="p">:</span>
+    <span class="n">Historial_precios</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">Historial_precios</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="s1">&#39;,&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;%&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">},</span> <span class="n">regex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">Historial_precios</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">Historial_precios</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>  <span class="c1"># Convertir a numérico</span>
+
+<span class="c1"># Paso 3: Convertir la columna de fecha a formato datetime y establecerla como índice</span>
+<span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+<span class="n">Historial_precios</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Date&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Paso 4: Ordenar el DataFrame por fecha en orden ascendente para calcular correctamente los retornos</span>
+<span class="n">Historial_precios</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Paso 5: Calcular el retorno diario y agregarlo como una columna &#39;Retorno_Diario&#39;</span>
+<span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Retorno_Diario&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Price&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pct_change</span><span class="p">()</span>
+
+<span class="c1"># Paso 6: Calcular el retorno acumulado y agregarlo como &#39;Retorno_Acumulado&#39;</span>
+<span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Retorno_Acumulado&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Retorno_Diario&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
+
+<span class="c1"># Paso 7: Calcular la volatilidad para cada ventana y agregarla al DataFrame</span>
+<span class="n">ventanas</span> <span class="o">=</span> <span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">28</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">ventana</span> <span class="ow">in</span> <span class="n">ventanas</span><span class="p">:</span>
+    <span class="n">Historial_precios</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;Volatilidad_</span><span class="si">{</span><span class="n">ventana</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Retorno_Diario&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">window</span><span class="o">=</span><span class="n">ventana</span><span class="p">)</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="s1">&#39;Date&#39;</span> <span class="ow">in</span> <span class="n">Historial_precios</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">&#39;coerce&#39;</span><span class="p">)</span>
+    <span class="n">Historial_precios</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Date&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Función para descomponer la serie y realizar la prueba de Ljung-Box en los residuos</span>
+<span class="k">def</span> <span class="nf">analizar_descomposicion_y_residuos</span><span class="p">(</span><span class="n">serie</span><span class="p">,</span> <span class="n">nombre</span><span class="p">):</span>
+    <span class="c1"># Eliminar valores nulos en la serie original</span>
+    <span class="n">serie</span> <span class="o">=</span> <span class="n">serie</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>  
+    
+    <span class="c1"># Descomposición de la serie temporal usando descomposición aditiva</span>
+    <span class="n">descomposicion</span> <span class="o">=</span> <span class="n">seasonal_decompose</span><span class="p">(</span><span class="n">serie</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;additive&#39;</span><span class="p">,</span> <span class="n">period</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>  <span class="c1"># Ajuste del periodo según la frecuencia esperada</span>
+
+    <span class="c1"># Graficar los componentes de la descomposición</span>
+    <span class="n">descomposicion</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Descomposición de la Serie Temporal - </span><span class="si">{</span><span class="n">nombre</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="c1"># Verificación de la independencia de los residuos</span>
+    <span class="n">residuos</span> <span class="o">=</span> <span class="n">descomposicion</span><span class="o">.</span><span class="n">resid</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+    <span class="n">ljung_box_residuos</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">acorr_ljungbox</span><span class="p">(</span><span class="n">residuos</span><span class="p">,</span> <span class="n">lags</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="n">return_df</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Prueba de Ljung-Box en los Residuos para </span><span class="si">{</span><span class="n">nombre</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estadístico: </span><span class="si">{</span><span class="n">ljung_box_residuos</span><span class="p">[</span><span class="s1">&#39;lb_stat&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">, p-valor: </span><span class="si">{</span><span class="n">ljung_box_residuos</span><span class="p">[</span><span class="s1">&#39;lb_pvalue&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># Cargar las series de los tres conjuntos de datos</span>
+<span class="n">price_series</span> <span class="o">=</span> <span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Price&#39;</span><span class="p">]</span>
+<span class="n">retorno_acumulado_series</span> <span class="o">=</span> <span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Retorno_Acumulado&#39;</span><span class="p">]</span>
+<span class="n">volatilidad_series</span> <span class="o">=</span> <span class="n">Historial_precios</span><span class="p">[</span><span class="s1">&#39;Volatilidad_7&#39;</span><span class="p">]</span>
+
+<span class="c1"># Aplicar el análisis a cada conjunto de datos sin transformaciones previas</span>
+<span class="n">analizar_descomposicion_y_residuos</span><span class="p">(</span><span class="n">price_series</span><span class="p">,</span> <span class="s2">&quot;Precio de Cierre BTC-USD&quot;</span><span class="p">)</span>
+<span class="n">analizar_descomposicion_y_residuos</span><span class="p">(</span><span class="n">retorno_acumulado_series</span><span class="p">,</span> <span class="s2">&quot;Retorno Acumulado Diario&quot;</span><span class="p">)</span>
+<span class="n">analizar_descomposicion_y_residuos</span><span class="p">(</span><span class="n">volatilidad_series</span><span class="p">,</span> <span class="s2">&quot;Volatilidad (7 días)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/c7246d3fecd60a557e671321aeac021de9f34131adef7596976acaffbf1af758.png" src="_images/c7246d3fecd60a557e671321aeac021de9f34131adef7596976acaffbf1af758.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prueba de Ljung-Box en los Residuos para Precio de Cierre BTC-USD:
+Estadístico: 7996.2933507225825, p-valor: 0.0
+==================================================
+</pre></div>
+</div>
+<img alt="_images/cbeb3e85406661dded1fc3f39402be0f4e766c6cd13b13df5f066d3cbc520e83.png" src="_images/cbeb3e85406661dded1fc3f39402be0f4e766c6cd13b13df5f066d3cbc520e83.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prueba de Ljung-Box en los Residuos para Retorno Acumulado Diario:
+Estadístico: 8001.254196084856, p-valor: 0.0
+==================================================
+</pre></div>
+</div>
+<img alt="_images/6698f66d1c6938f8e1ec4354d4705f06972bc15143eb4b23a75494c55ed66e40.png" src="_images/6698f66d1c6938f8e1ec4354d4705f06972bc15143eb4b23a75494c55ed66e40.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Prueba de Ljung-Box en los Residuos para Volatilidad (7 días):
+Estadístico: 10760.712038195155, p-valor: 0.0
+==================================================
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="interpretacion-de-la-descomposicion-de-la-serie-temporal-y-prueba-de-independencia-en-residuos">
+<h3>Interpretación de la Descomposición de la Serie Temporal y Prueba de Independencia en Residuos<a class="headerlink" href="#interpretacion-de-la-descomposicion-de-la-serie-temporal-y-prueba-de-independencia-en-residuos" title="Link to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p><strong>Precio de Cierre BTC-USD</strong>:</p>
+<ul class="simple">
+<li><p>La serie presenta una tendencia ascendente significativa a partir de 2016, acentuada especialmente en períodos de alta volatilidad como 2017 y 2020-2021.</p></li>
+<li><p>La componente estacional muestra variaciones constantes, mientras que los residuos indican episodios de alta variabilidad que coinciden con los picos en la serie original.</p></li>
+</ul>
+</li>
+<li><p><strong>Retorno Acumulado Diario</strong>:</p>
+<ul class="simple">
+<li><p>Se observa una tendencia creciente en el retorno acumulado, aunque con menor variabilidad que la serie de precios. La estacionalidad es mínima, y los residuos se mantienen relativamente estables, salvo por algunas fluctuaciones alrededor de 2013.</p></li>
+</ul>
+</li>
+<li><p><strong>Volatilidad (7 días)</strong>:</p>
+<ul class="simple">
+<li><p>La serie de volatilidad presenta una tendencia moderada con episodios de alta volatilidad en 2014 y 2020, como es esperable en el mercado de criptomonedas. La estacionalidad es baja, y los residuos sugieren independencia en su mayor parte, salvo excepciones puntuales.</p></li>
+</ul>
+</li>
+</ol>
+<section id="prueba-de-ljung-box-en-los-residuos">
+<h4>Prueba de Ljung-Box en los Residuos<a class="headerlink" href="#prueba-de-ljung-box-en-los-residuos" title="Link to this heading">#</a></h4>
+<p>La prueba de Ljung-Box aplicada a los residuos de cada serie nos arroja los siguientes resultados:</p>
+<ul class="simple">
+<li><p><strong>Precio de Cierre BTC-USD</strong>: Estadístico = 7996.29, p-valor = 0.0</p></li>
+<li><p><strong>Retorno Acumulado Diario</strong>: Estadístico = 8001.25, p-valor = 0.0</p></li>
+<li><p><strong>Volatilidad (7 días)</strong>: Estadístico = 10760.71, p-valor = 0.0</p></li>
+</ul>
+<p>Dado que los p-valores son significativamente bajos (0.0), rechazamos la hipótesis nula de independencia en los residuos. Esto indica que aún existe autocorrelación en los residuos de las series, lo cual sugiere la necesidad de un modelado adicional para capturar completamente la dependencia temporal en las observaciones.</p>
+</section>
+<section id="conclusion">
+<h4>Conclusión<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h4>
+<p>La descomposición de las series tamporales muestra tendencias y estacionalidades consistentes con el comportamiento del mercado de criptomonedas. Sin embargo, la falta de independencia en los residuos implica que estas series podrían beneficiarse de técnicas adicionales de modelado para mejorar la captura sus tendecias.</p>
+</section>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Parcial practico</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="Modelos_de_Deep_Learning.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Modelos de Deep Learning para Predicción de Series de Tiempo en Bitcoin</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#limpieza-y-preparacion-de-datos">Limpieza y Preparación de Datos</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calculo-de-retornos-y-volatilidad">Cálculo de Retornos y Volatilidad</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#identificacion-e-imputacion-de-datos-faltantes">Identificación e Imputación de Datos Faltantes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-del-histograma-volumen-de-transacciones-diarias-filtrado">Interpretación del Histograma - Volumen de Transacciones Diarias (Filtrado)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizacion-de-series-de-tiempo-con-graficos-de-velas-y-distribucion-del-volumen">Visualización de Series de Tiempo con Gráficos de Velas y Distribución del Volumen</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grafico-de-velas-precio-de-bitcoin">Gráfico de Velas - Precio de Bitcoin</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grafico-de-velas-retorno-acumulado-diario">Gráfico de Velas - Retorno Acumulado Diario</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#graficos-de-velas-volatilidad-7-14-21-y-28-dias">Gráficos de Velas - Volatilidad (7, 14, 21, y 28 días)</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-subseries">Análisis de Subseries</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-graficos-de-subseries-de-bitcoin">Interpretación de Gráficos de Subseries de Bitcoin</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-general-de-la-base-de-datos-de-bitcoin">Análisis General de la Base de Datos de Bitcoin</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#tendencias-de-precio">1. Tendencias de Precio</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#comportamiento-del-retorno-acumulado">2. Comportamiento del Retorno Acumulado</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-volatilidad">3. Análisis de Volatilidad</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusiones-generales">Conclusiones Generales</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-estacionariedad-en-series-de-tiempo">Análisis de Estacionariedad en Series de Tiempo</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fase-1-analisis-inicial-de-estacionariedad">Fase 1: Análisis Inicial de Estacionariedad</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fase-2-transformacion-y-verificacion-de-estacionariedad">Fase 2: Transformación y Verificación de Estacionariedad</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-resultados-de-estacionariedad">Interpretación de Resultados de Estacionariedad</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-estacionariedad-para-la-serie-original-de-price">Análisis de Estacionariedad para la Serie Original de <code class="docutils literal notranslate"><span class="pre">Price</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-estacionariedad-para-retorno-acumulado">Análisis de Estacionariedad para <code class="docutils literal notranslate"><span class="pre">Retorno_Acumulado</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-de-estacionariedad-para-volatilidad-7">Análisis de Estacionariedad para <code class="docutils literal notranslate"><span class="pre">Volatilidad_7</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resumen-final">Resumen Final</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analisis-estadistico-por-agrupacion-y-calculo-de-estadisticos-moviles">Análisis Estadístico por Agrupación y Cálculo de Estadísticos Móviles</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-general-de-las-distribuciones-de-frecuencias-por-lags-para-los-conjuntos-de-datos">Interpretación General de las Distribuciones de Frecuencias por Lags para los Conjuntos de Datos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#descomposicion-de-la-serie-temporal-y-verificacion-de-residuos">Descomposición de la Serie Temporal y Verificación de Residuos</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#interpretacion-de-la-descomposicion-de-la-serie-temporal-y-prueba-de-independencia-en-residuos">Interpretación de la Descomposición de la Serie Temporal y Prueba de Independencia en Residuos</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#prueba-de-ljung-box-en-los-residuos">Prueba de Ljung-Box en los Residuos</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusion">Conclusión</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Felipe Barrios , Sergio Silvera , Jose Montalvo
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
